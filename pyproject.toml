@@ -1,0 +1,49 @@
+[tool.black]
+line-length = 240
+
+[build-system]
+requires = ["setuptools>=42", "wheel", "setuptools_scm[tomli]>=6.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "foo"
+version = "0.1.0"
+authors = [
+    { name = "Your Name", email = "youremail@123.com" },
+]
+description = "A python template"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.8"
+license = { text = "MIT" }
+dependencies = [
+]
+
+[project.optional-dependencies]
+opt = [
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["*"]
+exclude = [
+    "test"
+]
+
+[tool.wheel]
+exclude = [
+    "test"
+]
+
+[project.scripts]
+foo = "foo.__main__:main"
+foo-func1 = "foo.__main__:func1"
+foo-func2 = "foo.__main__:func2"
+
+[project.urls]
+Homepage = "https://xxx.github.io"
+Repository = "https://github.com/xxx/yyy"
