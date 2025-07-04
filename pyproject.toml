@@ -6,10 +6,10 @@ requires = ["setuptools>=42", "wheel", "setuptools_scm[tomli]>=6.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "foo"
+name = "easy_sae"
 version = "0.1.0"
 authors = [
-    { name = "Your Name", email = "youremail@123.com" },
+    { name = "Kaichen, Zhang", email = "kaichenzhang358@outlook.com" },
 ]
 description = "A python template"
 readme = "README.md"
@@ -21,6 +21,8 @@ classifiers = [
 requires-python = ">=3.8"
 license = { text = "MIT" }
 dependencies = [
+    "peft",
+    "transformers",
 ]
 
 [project.optional-dependencies]
@@ -38,12 +40,3 @@ exclude = [
 exclude = [
     "test"
 ]
-
-[project.scripts]
-foo = "foo.__main__:main"
-foo-func1 = "foo.__main__:func1"
-foo-func2 = "foo.__main__:func2"
-
-[project.urls]
-Homepage = "https://xxx.github.io"
-Repository = "https://github.com/xxx/yyy"
