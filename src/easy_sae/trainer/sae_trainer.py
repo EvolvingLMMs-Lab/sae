@@ -17,12 +17,12 @@ class SaeTrainer(Trainer):
                 loss_kwargs["num_items_in_batch"] = num_items_in_batch
             inputs = {**inputs, **loss_kwargs}
 
-        model.special_peft_forward_args.add("with_cache")
         inputs["with_cache"] = True
         outputs = model(**inputs)
 
-        output_hidden_dict = model.base_model.output_hidden_dict
-        input_hidden_dict = model.base_model.input_hidden_dict
+        # Possibly wrap up here, we use the original unwrapped model
+        output_hidden_dict = self.model.base_model.output_hidden_dict
+        input_hidden_dict = self.model.base_model.input_hidden_dict
 
         per_layer_loss = {}
         total_loss = 0

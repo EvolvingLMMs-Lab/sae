@@ -14,15 +14,15 @@ class TopKSaeLayer(BaseTunerLayer):
     """
 
     # All names of layers that may contain (trainable) adapter weights
-    adapter_layer_names: tuple[str, ...] = ("encoder", "W_dec", "b_dec")
+    adapter_layer_names: tuple[str, ...] = ("sae_encoder", "sae_W_dec", "sae_b_dec")
     # All names of other parameters that may contain adapter-related parameters
     other_param_names: tuple[str, ...] = ("k",)
 
     def __init__(self, base_layer: nn.Module, *args, **kwargs):
         self.base_layer = base_layer
-        self.encoder = nn.ModuleDict({})
-        self.W_dec = nn.ParameterDict({})
-        self.b_dec = nn.ParameterDict({})
+        self.sae_encoder = nn.ModuleDict({})
+        self.sae_W_dec = nn.ParameterDict({})
+        self.sae_b_dec = nn.ParameterDict({})
         self.k = {}
 
         self._disable_adapters = False
@@ -62,15 +62,15 @@ class TopKSaeLayer(BaseTunerLayer):
         if num_latents == 0:
             num_latents = expansion_factor * self.in_features
 
-        self.encoder[adapter_name] = nn.Linear(
-            self.in_features, num_latents, bias=False
+        self.sae_encoder[adapter_name] = nn.Linear(
+            self.out_features, num_latents, bias=False
         )
         # When we init new adapters, we copy the weights from the encoder for decoder
-        self.W_dec[adapter_name] = nn.Parameter(
-            self.encoder[adapter_name].weight.data.clone()
+        self.sae_W_dec[adapter_name] = nn.Parameter(
+            self.sae_encoder[adapter_name].weight.data.clone()
         )
-        self.b_dec[adapter_name] = nn.Parameter(
-            torch.zeros(self.in_features, dtype=torch.float32)
+        self.sae_b_dec[adapter_name] = nn.Parameter(
+            torch.zeros(self.out_features, dtype=torch.float32)
         )
         self.k[adapter_name] = k
         self._move_adapter_to_device_of_base_layer(adapter_name)
@@ -139,13 +139,13 @@ class Linear(nn.Module, TopKSaeLayer):
             final_result = torch.zeros_like(result, dtype=torch_result_dtype)
 
             for activate_adapter in self.active_adapters:
-                encoder = self.encoder[activate_adapter]
-                W_dec = self.W_dec[activate_adapter]
-                bias = self.b_dec[activate_adapter]
+                encoder = self.sae_encoder[activate_adapter]
+                W_dec = self.sae_W_dec[activate_adapter]
+                bias = self.sae_b_dec[activate_adapter]
                 k = self.k[activate_adapter]
-                x = self._cast_input_dtype(x, encoder.weight.dtype)
+                result = self._cast_input_dtype(result, encoder.weight.dtype)
                 # Remove decoder bias as per Anthropic
-                sae_in = x - bias
+                sae_in = result - bias
                 pre_act: torch.Tensor = encoder(sae_in)
                 top_acts, top_indices = pre_act.topk(k, sorted=False)
                 sae_out = self.eager_decode(top_indices, top_acts, W_dec.mT)

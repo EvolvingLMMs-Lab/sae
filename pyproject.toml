@@ -25,12 +25,16 @@ dependencies = [
     "transformers",
     "datasets",
     "torchvision",
-    "accelerate"
+    "accelerate",
+    "deepspeed",
 ]
 
 [project.optional-dependencies]
 opt = [
 ]
+
+[project.scripts]
+easy-sae-train = "easy_sae.launch.train:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

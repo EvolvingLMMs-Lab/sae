@@ -26,10 +26,12 @@ if __name__ == "__main__":
             for option, choice in zip(choices, options):
                 question += f"{option}. {choice}\n"
 
+            image_content = [{"type": "image"}] * len(image_list)
+
             messages = [
                 {
                     "role": "user",
-                    "content": [{"type": "image"}, {"type": "text", "text": question}],
+                    "content": [{"type": "text", "text": question}, *image_content],
                 },
                 {"role": "assistant", "content": [{"type": "text", "text": answer}]},
             ]

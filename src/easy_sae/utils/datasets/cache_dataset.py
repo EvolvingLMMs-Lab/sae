@@ -36,12 +36,14 @@ class DataCollator:
                 inputs[key].append(values)
 
         input_ids = inputs.pop("input_ids")
+        input_ids = [input_id.squeeze(0) for input_id in input_ids]
         input_ids = self.pad_sequence(
             input_ids,
             batch_first=True,
             padding_value=self.processor.tokenizer.pad_token_id,
         )
         attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
+        inputs.pop("attention_mask")
         batched_inputs = {}
         for key, values in inputs.items():
             batched_inputs[key] = torch.concatenate(values, dim=0)
@@ -76,7 +78,7 @@ class CacheDataset(Dataset):
         self.dataframe = dataset
 
     def __getitem__(self, index):
-        row = self.dataframe[row]
+        row = self.dataframe[index]
 
         if self.processor is not None:
             # By default we assume
@@ -112,3 +114,6 @@ class CacheDataset(Dataset):
 
     def get_collator(self):
         return DataCollator(self.tokenizer, self.processor)
+
+    def __len__(self):
+        return len(self.dataframe)
