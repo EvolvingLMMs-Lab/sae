@@ -147,10 +147,9 @@ class Linear(nn.Module, TopKSaeLayer):
                 # Remove decoder bias as per Anthropic
                 sae_in = x - bias
                 pre_act: torch.Tensor = encoder(sae_in)
-                top_acts, top_indices = pre_act.topk(
-                    self.k[activate_adapter], sorted=False
-                )
+                top_acts, top_indices = pre_act.topk(k, sorted=False)
                 sae_out = self.eager_decode(top_indices, top_acts, W_dec.mT)
+                sae_out = sae_out + bias
                 final_result += sae_out
 
             final_result /= len(self.active_adapters)

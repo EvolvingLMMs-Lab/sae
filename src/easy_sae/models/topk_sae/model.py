@@ -1,4 +1,6 @@
-from typing import Any
+from contextlib import contextmanager
+from functools import partial
+from typing import Any, Dict, Union
 
 import torch
 import torch.nn as nn
@@ -18,6 +20,8 @@ class TopKSaeModel(BaseTuner):
 
     def __init__(self, model, peft_config, adapter_name, low_cpu_mem_usage=False):
         super().__init__(model, peft_config, adapter_name, low_cpu_mem_usage)
+        self.output_hidden_dict: Dict[str, torch.Tensor] = {}
+        self.input_hidden_dict: Dict[str, torch.Tensor] = {}
 
     def _prepare_adapter_config(self, peft_config, model_config):
         if peft_config.target_modules is None:
@@ -120,7 +124,7 @@ class TopKSaeModel(BaseTuner):
         """
         self._set_adapter_layers(enabled=False)
 
-    def set_adapter(self, adapter_name: str | list[str]) -> None:
+    def set_adapter(self, adapter_name: Union[str, list[str]]) -> None:
         """Set the active adapter(s).
 
         Additionally, this function will set the specified adapters to trainable (i.e., requires_grad=True). If this is
@@ -151,3 +155,43 @@ class TopKSaeModel(BaseTuner):
         Call this if you have previously disabled all adapters and want to re-enable them.
         """
         self._set_adapter_layers(enabled=True)
+
+    @contextmanager
+    def _enable_peft_forward_hooks(self, *args, **kwargs):
+        with_cache = kwargs.pop("with_cache", False)
+        # If does not need cache, just return
+        if not with_cache:
+            yield
+            return
+
+        hook_handles = []
+
+        def forward_hook_base(module, inputs, outputs, name):
+            # Maybe unpack tuple outputs
+            if isinstance(outputs, tuple):
+                outputs = outputs[0]
+
+            self.input_hidden_dict[name] = outputs.flatten(0, 1)
+
+        # For the whole module, we get the output, because it is the reconstruction
+        def forward_hook_sae(module, inputs, outputs, name):
+            # Maybe unpack tuple outputs
+            if isinstance(outputs, tuple):
+                outputs = outputs[0]
+
+            self.output_hidden_dict[name] = outputs.flatten(0, 1)
+
+        for name, module in self.named_modules():
+            if isinstance(module, TopKSaeLayer):
+                # For the base layer, we cache the outputs of it
+                forward_hook = partial(forward_hook_base, name=name)
+                handle = module.base_layer.register_forward_hook(forward_hook)
+                hook_handles.append(handle)
+                forward_hook = partial(forward_hook_sae, name=name)
+                handle = module.register_forward_hook(forward_hook)
+                hook_handles.append(handle)
+
+        yield
+
+        for handle in hook_handles:
+            handle.remove()
