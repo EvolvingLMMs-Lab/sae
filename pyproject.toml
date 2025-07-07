@@ -23,6 +23,9 @@ license = { text = "MIT" }
 dependencies = [
     "peft",
     "transformers",
+    "datasets",
+    "torchvision",
+    "accelerate"
 ]
 
 [project.optional-dependencies]
