@@ -27,6 +27,7 @@ dependencies = [
     "torchvision",
     "accelerate",
     "deepspeed",
+    "hf_transfer",
 ]
 
 [project.optional-dependencies]

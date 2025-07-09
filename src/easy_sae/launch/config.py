@@ -25,4 +25,3 @@ class SaeConfig:
     num_latents: int = 4096
     k: Optional[int] = 32
     target_modules: Optional[str] = "model.layers.24.o_proj"
-    task_type: str = "CAUSAL_LM"
