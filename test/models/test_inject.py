@@ -2,9 +2,9 @@ import unittest
 
 import torch
 import torch.nn as nn
-from peft import get_peft_model, inject_adapter_in_model
+from peft import inject_adapter_in_model
 
-from easy_sae import TopKSaeConfig
+from easy_sae import TopKSaeConfig, get_peft_sae_model
 
 
 class DummyModel(nn.Module):
@@ -35,7 +35,7 @@ class TestInjectAdapter(unittest.TestCase):
         config = TopKSaeConfig(k=1, num_latents=5, target_modules=["linear"])
 
         # Get the PEFT model
-        peft_model = get_peft_model(model, config)
+        peft_model = get_peft_sae_model(model, config)
 
         result = peft_model(torch.randn(1, 512, 10))
 

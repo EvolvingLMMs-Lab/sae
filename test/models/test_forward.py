@@ -2,9 +2,8 @@ import unittest
 
 import torch
 import torch.nn as nn
-from peft import get_peft_model, inject_adapter_in_model
 
-from easy_sae import TopKSaeConfig
+from easy_sae import TopKSaeConfig, get_peft_sae_model
 
 
 class DummyModel(nn.Module):
@@ -27,7 +26,7 @@ class TestForward(unittest.TestCase):
         original_result = model(tensor_input)
 
         # Get the PEFT model
-        peft_model = get_peft_model(model, config)
+        peft_model = get_peft_sae_model(model, config)
 
         result = peft_model(tensor_input)
 
@@ -47,7 +46,7 @@ class TestForward(unittest.TestCase):
         original_result = model(tensor_input)
 
         # Get the PEFT model
-        peft_model = get_peft_model(model, config)
+        peft_model = get_peft_sae_model(model, config)
         peft_model.eval()
 
         result = peft_model(tensor_input)

@@ -192,6 +192,6 @@ class TopKSaeModel(BaseSaeModel):
         for name, module in self.named_modules():
             if isinstance(module, TopKSaeLayer):
                 log_dict[
-                    f"{name}.dead_latent_percentage"
+                    f"{name}/dead_latent_percentage"
                 ] = module.dead_latent_percentage
         return log_dict

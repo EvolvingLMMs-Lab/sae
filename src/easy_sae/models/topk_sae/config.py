@@ -6,6 +6,8 @@ from typing import Literal, Optional, Union
 from peft.config import PeftConfig
 from peft.utils import PeftType
 
+from ...utils import SaeType
+
 
 @dataclass
 class TopKSaeConfig(PeftConfig):
@@ -51,7 +53,7 @@ class TopKSaeConfig(PeftConfig):
 
     def __post_init__(self):
         super().__post_init__()
-        self.peft_type = "TOPK_SAE"
+        self.peft_type = SaeType.TOPK_SAE
         self.target_modules = (
             set(self.target_modules)
             if isinstance(self.target_modules, list)

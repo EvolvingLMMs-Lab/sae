@@ -168,9 +168,13 @@ class Linear(nn.Module, TopKSaeLayer):
 
     @property
     def dead_latent_percentage(self):
-        return sum(self.num_tokens_fired < self.dead_tokens_threshold) / len(
+        percentage = sum(self.num_tokens_fired < self.dead_tokens_threshold) / len(
             self.num_tokens_fired
         )
+        percentage = (
+            percentage.item() if isinstance(percentage, torch.Tensor) else percentage
+        )
+        return percentage
 
     def __repr__(self):
         rep = super().__repr__()

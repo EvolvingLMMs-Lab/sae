@@ -1,10 +1,8 @@
 import datasets
 import torch
 import transformers
-from peft import get_peft_model
-from peft.mapping import PEFT_TYPE_TO_CONFIG_MAPPING
 
-from easy_sae import TopKSaeConfig
+from easy_sae import get_peft_sae_model
 from easy_sae.launch.config import ModelArguments, SaeConfig, TrainingArguments
 from easy_sae.trainer import SaeTrainer
 from easy_sae.utils import hf_processor, hf_tokenizer
@@ -35,7 +33,7 @@ def main():
 
     model = ModelFactory.create_model(**model_kwargs)
     model_config = model.config
-    model = get_peft_model(model, sae_config)
+    model = get_peft_sae_model(model, sae_config)
     model.config = model_config
     model.print_trainable_parameters()
 
