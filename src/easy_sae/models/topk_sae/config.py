@@ -39,6 +39,15 @@ class TopKSaeConfig(PeftConfig):
             )
         },
     )
+    dead_tokens_threshold: Optional[int] = field(
+        default=10000000,
+        metadata={
+            "help": (
+                "Threshold for dead tokens. If the number of tokens fired is less than this threshold, "
+                "the token is considered dead."
+            )
+        },
+    )
 
     def __post_init__(self):
         super().__post_init__()

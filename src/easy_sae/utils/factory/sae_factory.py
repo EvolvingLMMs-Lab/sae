@@ -41,6 +41,7 @@ class SaeFactory:
                 num_latents=sae_config.get("num_latents", 4096),
                 k=sae_config.get("k", 32),
                 target_modules=sae_config.get("target_modules", None),
+                dead_tokens_threshold=sae_config.get("dead_tokens_threshold", 10000000),
             )
         else:
             raise NotImplementedError(f"Sae type : {sae_type} not implemented yet")

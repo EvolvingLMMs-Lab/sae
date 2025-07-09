@@ -37,6 +37,11 @@ class SaeTrainer(Trainer):
             per_layer_loss[layer] = fvu.item()
             total_loss += fvu
 
+        aux_log_info = self.model.base_model.get_aux_log_info()
+        if aux_log_info:
+            for key, value in aux_log_info.items():
+                per_layer_loss[key] = value
+
         self.log(per_layer_loss)
 
         return (total_loss, outputs) if return_outputs else total_loss

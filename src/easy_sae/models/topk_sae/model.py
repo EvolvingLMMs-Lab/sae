@@ -11,29 +11,16 @@ from peft.tuners.tuners_utils import (
 )
 from peft.utils import AuxiliaryTrainingWrapper
 
+from ..base import BaseSaeModel
 from .config import TopKSaeConfig
 from .layer import TopKSaeLayer, dispatch_default
 
 
-class TopKSaeModel(BaseTuner):
+class TopKSaeModel(BaseSaeModel):
     prefix: str = "sae_"
 
     def __init__(self, model, peft_config, adapter_name, low_cpu_mem_usage=False):
         super().__init__(model, peft_config, adapter_name, low_cpu_mem_usage)
-        self.output_hidden_dict: Dict[str, torch.Tensor] = {}
-        self.input_hidden_dict: Dict[str, torch.Tensor] = {}
-
-    @property
-    def prepare_inputs_for_generation(self):
-        if hasattr(self.model, "prepare_inputs_for_generation"):
-            return self.model.prepare_inputs_for_generation
-        else:
-            return None
-
-    def _prepare_adapter_config(self, peft_config, model_config):
-        if peft_config.target_modules is None:
-            raise ValueError("Please specify `target_modules` in `peft_config`")
-        return peft_config
 
     def _create_and_replace(
         self,
@@ -50,6 +37,7 @@ class TopKSaeModel(BaseTuner):
                 "k": peft_config.k,
                 "num_latents": peft_config.num_latents,
                 "expansion_factor": peft_config.expansion_factor,
+                "dead_tokens_threshold": peft_config.dead_tokens_threshold,
             }
         )
         if isinstance(target, TopKSaeLayer):
@@ -198,3 +186,12 @@ class TopKSaeModel(BaseTuner):
 
         for handle in hook_handles:
             handle.remove()
+
+    def get_aux_log_info(self):
+        log_dict = {}
+        for name, module in self.named_modules():
+            if isinstance(module, TopKSaeLayer):
+                log_dict[
+                    f"{name}.dead_latent_percentage"
+                ] = module.dead_latent_percentage
+        return log_dict

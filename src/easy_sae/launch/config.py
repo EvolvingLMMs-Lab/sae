@@ -11,6 +11,7 @@ class TrainingArguments(transformers.TrainingArguments):
     image_key: Optional[str] = "images"
     video_key: Optional[str] = "videos"
     audio_key: Optional[str] = "audios"
+    aux_alpha: Optional[float] = 0.1
 
 
 @dataclass
@@ -24,4 +25,5 @@ class SaeConfig:
     sae_type: str = "TOPK_SAE"
     num_latents: int = 4096
     k: Optional[int] = 32
+    dead_tokens_threshold: Optional[int] = 100000
     target_modules: Optional[str] = "model.layers.24.o_proj"

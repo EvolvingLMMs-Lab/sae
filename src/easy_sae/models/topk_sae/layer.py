@@ -106,6 +106,7 @@ class Linear(nn.Module, TopKSaeLayer):
         k: int = 32,
         num_latents: int = 0,
         expansion_factor: int = 32,
+        dead_tokens_threshold: int = 10000000,
         **kwargs,
     ):
         super().__init__()
@@ -118,6 +119,8 @@ class Linear(nn.Module, TopKSaeLayer):
             num_latents=num_latents,
             expansion_factor=expansion_factor,
         )
+        self.num_tokens_fired = torch.zeros(num_latents, dtype=torch.int64)
+        self.dead_tokens_threshold = dead_tokens_threshold
 
     def eager_decode(
         self, top_indices: torch.Tensor, top_acts: torch.Tensor, W_dec: torch.Tensor
@@ -137,6 +140,10 @@ class Linear(nn.Module, TopKSaeLayer):
             torch_result_dtype = result.dtype
             # If we use sae, sae is reconstruction, we add and avg multiple saes
             final_result = torch.zeros_like(result, dtype=torch_result_dtype)
+            if result.dim() == 3:
+                num_tokens = result.shape[0] * result.shape[1]
+            else:
+                num_tokens = result.shape[0]
 
             for activate_adapter in self.active_adapters:
                 encoder = self.sae_encoder[activate_adapter]
@@ -150,12 +157,20 @@ class Linear(nn.Module, TopKSaeLayer):
                 top_acts, top_indices = pre_act.topk(k, sorted=False)
                 sae_out = self.eager_decode(top_indices, top_acts, W_dec.mT)
                 sae_out = sae_out + bias
+                for indice in top_indices:
+                    self.num_tokens_fired[indice.cpu()] += num_tokens
                 final_result += sae_out
 
             final_result /= len(self.active_adapters)
             final_result = final_result.to(torch_result_dtype)
 
         return final_result
+
+    @property
+    def dead_latent_percentage(self):
+        return sum(self.num_tokens_fired < self.dead_tokens_threshold) / len(
+            self.num_tokens_fired
+        )
 
     def __repr__(self):
         rep = super().__repr__()
