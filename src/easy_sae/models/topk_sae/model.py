@@ -165,12 +165,6 @@ class TopKSaeModel(BaseTuner):
 
     @contextmanager
     def _enable_peft_forward_hooks(self, *args, **kwargs):
-        with_cache = kwargs.pop("with_cache", False)
-        # If does not need cache, just return
-        if not with_cache:
-            yield
-            return
-
         hook_handles = []
 
         def forward_hook_base(module, inputs, outputs, name):
@@ -187,6 +181,8 @@ class TopKSaeModel(BaseTuner):
                 outputs = outputs[0]
 
             self.output_hidden_dict[name] = outputs.flatten(0, 1)
+            if self.training:
+                return self.input_hidden_dict[name].view(outputs.shape)
 
         for name, module in self.named_modules():
             if isinstance(module, TopKSaeLayer):

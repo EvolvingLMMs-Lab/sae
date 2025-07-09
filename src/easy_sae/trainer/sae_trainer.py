@@ -17,7 +17,6 @@ class SaeTrainer(Trainer):
                 loss_kwargs["num_items_in_batch"] = num_items_in_batch
             inputs = {**inputs, **loss_kwargs}
 
-        inputs["with_cache"] = True
         outputs = model(**inputs)
 
         # Possibly wrap up here, we use the original unwrapped model

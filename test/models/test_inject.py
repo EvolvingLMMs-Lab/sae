@@ -37,10 +37,7 @@ class TestInjectAdapter(unittest.TestCase):
         # Get the PEFT model
         peft_model = get_peft_model(model, config)
 
-        kwargs = {"with_cache": True}
-        peft_model.special_peft_forward_args.add("with_cache")
-
-        result = peft_model(torch.randn(1, 512, 10), **kwargs)
+        result = peft_model(torch.randn(1, 512, 10))
 
         self.assertIsInstance(result, torch.Tensor)
         self.assertEqual(result.shape, (1, 512, 10))
