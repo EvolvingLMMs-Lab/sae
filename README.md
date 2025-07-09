@@ -48,26 +48,34 @@ self.assertIsInstance(result, torch.Tensor)
 self.assertEqual(result.shape, (1, 512, 10))
 
 ```
+
+## Data
+
+To ensure consistency in data formatting, we recommend first processing your data and storing it in Parquet format. This standardization simplifies interface development and data preparation.
+
+You are free to customize the preprocessing logic and define keys for different modalities. However, the final output should be compatible with chat templates and our preprocessing pipeline.  
+An example preprocessing script is available at:  
+`examples/data_process/llava_ov_clevr.py`
+
+---
+
 ## Training
 
-We provide a simple training recipe to help you get started quickly. You’re also free to implement your own training pipeline.
+Our trainer implementation builds on top of existing frameworks and supports the following features:
+- ZeRO-1/2/3 training
+- Weights & Biases (WandB) logging
 
-```bash
-torchrun --nproc_per_node="1" --nnodes="1" --node_rank="0" --master_addr="127.0.0.1" --master_port="1234" \
-    src/easy_sae/launch/train.py \
-    --dataset_path ./data/mmmu.parquet \
-    --image_key images \
-    --run_name sae_test \
-    --report_to none \
-    --model-path Qwen/Qwen2.5-VL-7B-Instruct \
-    --bf16 \
-    --target_modules model.language_model.layers.24.mlp.down_proj \
-    --dataloader_num_workers 1 \
-    --task_type NONE --per_device_train_batch_size 1
-```
+With ZeRO optimizations, you can train SAEs on 72B models using just 8×A800 GPUs.
 
+We provide a simple training recipe to help you get started quickly. You're also welcome to implement your own training pipeline.
 
-## TODO
-- More Model training
-- FSDP and Zero3 Support
-- Demonstrate the possibility to be trained on 72B models
+### Quick Start
+
+- ZeRO-3, 72B training:  
+  `examples/train/zero/run_qwen25_vl_72b_zero3.sh`
+
+- ZeRO-2, 7B training:  
+  `examples/train/zero/run_qwen25_vl_7b_zero2.sh`
+
+- DDP, 7B training:  
+  `examples/train/ddp/run_qwen25_vl_7b_ddp.sh`

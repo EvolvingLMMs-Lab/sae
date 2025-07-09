@@ -41,7 +41,7 @@ def main():
 
     dataset = trainer_args.dataset_path
     if "parquet" not in dataset:
-        dataset = datasets.load_dataset(dataset)
+        dataset = datasets.load_dataset(dataset, split="train")
 
     sae_dataset = CacheDataset(
         dataset=dataset,
