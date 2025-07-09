@@ -10,9 +10,9 @@ With this design, injecting an SAE module is as simple as:
 
 import torch
 import torch.nn as nn
-from peft import get_peft_model, inject_adapter_in_model
+from peft import inject_adapter_in_model
 
-from easy_sae import TopKSaeConfig
+from easy_sae import TopKSaeConfig, get_peft_sae_model, PeftSaeModel
 
 class DummyModel(nn.Module):
     def __init__(self):
@@ -36,17 +36,23 @@ You can also obtain a PEFT-wrapped model using the magic function from the PEFT 
 
 ```python
 # Get the PEFT model
-peft_model = get_peft_model(model, config)
+peft_model = get_peft_sae_model(model, config)
 
-# Allows you to cache the output and input state
-kwargs = {"with_cache": True}
-peft_model.special_peft_forward_args.add("with_cache")
+result = peft_model(torch.randn(1, 512, 10))
+```
 
-result = peft_model(torch.randn(1, 512, 10), **kwargs)
+Loading and saving is similar to PeftModel
 
-self.assertIsInstance(result, torch.Tensor)
-self.assertEqual(result.shape, (1, 512, 10))
+```python
+peft_model.save_pretrained("test_save_peft_model")
 
+model = DummyModel()
+peft_model = PeftSaeModel.from_pretrained(
+    model,
+    "test_save_peft_model",
+    adapter_name="default",
+    low_cpu_mem_usage=True,
+)
 ```
 
 ## Data
