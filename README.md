@@ -1,5 +1,5 @@
-# sae
-sae is inspired by a wealth of Sparse Autoencoder (SAE) work from Anthropic, OpenAI, Google, and the open-source community. SAE has become a powerful and widely-used tool in the field of explainable AI. This project aims to provide a simple and flexible interface that allows users to inject SAE modules into their models at any layer with minimal effort. As long as the target is an nn.Module, SAE can be easily integrated and trained.
+# SAE
+SAE is inspired by a wealth of Sparse Autoencoder (SAE) work from Anthropic, OpenAI, Google, and the open-source community. SAE has become a powerful and widely-used tool in the field of explainable AI. This project aims to provide a simple and flexible interface that allows users to inject SAE modules into their models at any layer with minimal effort. As long as the target is an nn.Module, SAE can be easily integrated and trained.
 
 ## Design Philosophy
 The code design takes inspiration from PEFT, as we believe SAE shares many structural similarities with PEFT-based methods. By inheriting from a BaseTuner class, we enable seamless SAE integration into existing models.
