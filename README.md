@@ -1,4 +1,7 @@
 # SAE
+
+<img width="3804" height="3497" alt="sae" src="https://github.com/user-attachments/assets/a21d9499-37fd-44bc-a724-5cd7e5ea0d6b" />
+
 SAE is inspired by a wealth of Sparse Autoencoder (SAE) work from Anthropic, OpenAI, Google, and the open-source community. SAE has become a powerful and widely-used tool in the field of explainable AI. This project aims to provide a simple and flexible interface that allows users to inject SAE modules into their models at any layer with minimal effort. As long as the target is an nn.Module, SAE can be easily integrated and trained.
 
 ## Design Philosophy
@@ -89,3 +92,8 @@ We provide a simple training recipe to help you get started quickly. You're also
 
 - DDP, 7B training:  
   `examples/train/ddp/run_qwen25_vl_7b_ddp.sh`
+
+### Reproducible Logs
+
+<img width="2140" height="1830" alt="image" src="https://github.com/user-attachments/assets/2e092402-fcfb-4002-badb-55e135cd56b1" />
+
