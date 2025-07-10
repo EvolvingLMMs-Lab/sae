@@ -44,12 +44,9 @@ def main():
     model.config = model_config
     model.print_trainable_parameters()
 
-    dataset = trainer_args.dataset_path
-    split = trainer_args.split
-    subset = trainer_args.subset
-    if "parquet" not in dataset: # if dataset is not processed, load it from huggingface and process it in local
-        dataset = datasets.load_dataset(dataset, split=split, name=subset)
-        if "LLaVA-OneVision-Data" in dataset:
+    if "parquet" not in trainer_args.dataset_path: # if dataset is not processed, load it from huggingface and process it in local
+        dataset = datasets.load_dataset(trainer_args.dataset_path, split=trainer_args.split, name=trainer_args.subset)
+        if "LLaVA-OneVision-Data" in trainer_args.dataset_path:
             import sys
             from pathlib import Path
             sys.path.append(str(Path(__file__).parent.parent.parent.parent / "examples"))
