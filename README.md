@@ -55,13 +55,17 @@ peft_model = PeftSaeModel.from_pretrained(
 )
 ```
 
-## Data
+## Data Processing
 
 To ensure consistency in data formatting, we recommend first processing your data and storing it in Parquet format. This standardization simplifies interface development and data preparation.
 
 You are free to customize the preprocessing logic and define keys for different modalities. However, the final output should be compatible with chat templates and our preprocessing pipeline.  
 An example preprocessing script is available at:  
 `examples/data_process/llava_ov_clevr.py`
+
+```sh
+python examples/data_process/llava_ov_clevr.py --push_to_hub --hf_repo_path lmms-lab/LLaVA-OneVision-Data --subset "CLEVR-Math(MathV360K)" --split train --target_hf_repo_path lmms-lab/LLaVA-OneVision-Data-SAE
+```
 
 ---
 
