@@ -1,6 +1,8 @@
 import datasets
 import torch
 import transformers
+import wandb
+import os
 
 from easy_sae import get_peft_sae_model
 from easy_sae.launch.config import ModelArguments, SaeConfig, TrainingArguments
@@ -9,6 +11,11 @@ from easy_sae.utils import hf_processor, hf_tokenizer
 from easy_sae.utils.datasets import CacheDataset
 from easy_sae.utils.factory import ModelFactory, SaeFactory
 
+try:
+    if not os.environ.get("WANDB_API_KEY", None):
+        wandb.login(key=os.environ.get("WANDB_API_KEY", None))
+except Exception as e:
+    pass
 
 def main():
     parser = transformers.HfArgumentParser(
@@ -38,8 +45,16 @@ def main():
     model.print_trainable_parameters()
 
     dataset = trainer_args.dataset_path
-    if "parquet" not in dataset:
-        dataset = datasets.load_dataset(dataset, split="train")
+    split = trainer_args.split
+    subset = trainer_args.subset
+    if "parquet" not in dataset: # if dataset is not processed, load it from huggingface and process it in local
+        dataset = datasets.load_dataset(dataset, split=split, name=subset)
+        if "LLaVA-OneVision-Data" in dataset:
+            import sys
+            from pathlib import Path
+            sys.path.append(str(Path(__file__).parent.parent.parent.parent / "examples"))
+            from data_process.llava_ov_clevr import convert_llava_ov_dataset
+            dataset = dataset.map(convert_llava_ov_dataset, remove_columns=dataset.column_names, num_proc=32)
 
     sae_dataset = CacheDataset(
         dataset=dataset,

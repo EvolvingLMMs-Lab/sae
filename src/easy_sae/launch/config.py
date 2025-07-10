@@ -7,6 +7,8 @@ import transformers
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):
     dataset_path: str = "./data/examples.parquet"
+    split: Optional[str] = "train"
+    subset: Optional[str] = None
     text_key: Optional[str] = "text"
     image_key: Optional[str] = "images"
     video_key: Optional[str] = "videos"

@@ -28,6 +28,7 @@ dependencies = [
     "accelerate",
     "deepspeed",
     "hf_transfer",
+    "wandb",
 ]
 
 [project.optional-dependencies]

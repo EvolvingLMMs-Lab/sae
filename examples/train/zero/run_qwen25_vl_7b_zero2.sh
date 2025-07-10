@@ -2,7 +2,9 @@
 
 torchrun --nproc_per_node="8" --nnodes="1" --node_rank="0" --master_addr="127.0.0.1" --master_port="1234" \
     src/easy_sae/launch/train.py \
-    --dataset_path ./data/llava_ov_clevr.parquet \
+    --dataset_path lmms-lab/LLaVA-OneVision-Data \
+    --split train \
+    --subset "CLEVR-Math(MathV360K)" \
     --image_key images \
     --run_name sae_test \
     --report_to wandb \
