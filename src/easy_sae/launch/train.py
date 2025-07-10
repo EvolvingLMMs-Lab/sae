@@ -4,12 +4,12 @@ import transformers
 import wandb
 import os
 
-from easy_sae import get_peft_sae_model
-from easy_sae.launch.config import ModelArguments, SaeConfig, TrainingArguments
-from easy_sae.trainer import SaeTrainer
-from easy_sae.utils import hf_processor, hf_tokenizer
-from easy_sae.utils.datasets import CacheDataset
-from easy_sae.utils.factory import ModelFactory, SaeFactory
+from sae import get_peft_sae_model
+from sae.launch.config import ModelArguments, SaeConfig, TrainingArguments
+from sae.trainer import SaeTrainer
+from sae.utils import hf_processor, hf_tokenizer
+from sae.utils.datasets import CacheDataset
+from sae.utils.factory import ModelFactory, SaeFactory
 
 try:
     if not os.environ.get("WANDB_API_KEY", None):

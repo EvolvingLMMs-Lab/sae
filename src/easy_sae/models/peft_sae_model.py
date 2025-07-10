@@ -7,7 +7,7 @@ from peft import PeftModel
 from peft.utils import SAFETENSORS_WEIGHTS_NAME, WEIGHTS_NAME, id_tensor_storage
 from safetensors.torch import save_file as safe_save_file
 
-from easy_sae.utils import get_peft_model_state_dict
+from sae.utils import get_peft_model_state_dict
 
 
 class PeftSaeModel(PeftModel):

@@ -3,7 +3,7 @@ import unittest
 import torch
 import torch.nn as nn
 
-from easy_sae import TopKSaeConfig, get_peft_sae_model
+from sae import TopKSaeConfig, get_peft_sae_model
 
 
 class DummyModel(nn.Module):

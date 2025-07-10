@@ -6,10 +6,10 @@ requires = ["setuptools>=42", "wheel", "setuptools_scm[tomli]>=6.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "easy_sae"
+name = "sae"
 version = "0.1.0"
 authors = [
-    { name = "Kaichen, Zhang", email = "kaichenzhang358@outlook.com" },
+    { name = "LMMs-Lab", email = "lmms-lab@gmail.com" },
 ]
 description = "A python template"
 readme = "README.md"
@@ -36,7 +36,7 @@ opt = [
 ]
 
 [project.scripts]
-easy-sae-train = "easy_sae.launch.train:main"
+sae-train = "sae.launch.train:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

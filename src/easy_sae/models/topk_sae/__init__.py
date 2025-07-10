@@ -1,4 +1,4 @@
-from easy_sae.utils.registry import register_sae_method
+from sae.utils.registry import register_sae_method
 
 from ...utils import SaeType
 from .config import TopKSaeConfig
