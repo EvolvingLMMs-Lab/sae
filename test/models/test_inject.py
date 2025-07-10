@@ -3,7 +3,6 @@ import unittest
 import torch
 import torch.nn as nn
 from peft import inject_adapter_in_model
-
 from sae import TopKSaeConfig, get_peft_sae_model
 
 

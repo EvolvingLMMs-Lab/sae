@@ -1,9 +1,8 @@
+import os
+
 import datasets
 import torch
 import transformers
-import wandb
-import os
-
 from sae import get_peft_sae_model
 from sae.launch.config import ModelArguments, SaeConfig, TrainingArguments
 from sae.trainer import SaeTrainer
@@ -11,11 +10,14 @@ from sae.utils import hf_processor, hf_tokenizer
 from sae.utils.datasets import CacheDataset
 from sae.utils.factory import ModelFactory, SaeFactory
 
+import wandb
+
 try:
     if not os.environ.get("WANDB_API_KEY", None):
         wandb.login(key=os.environ.get("WANDB_API_KEY", None))
 except Exception as e:
     pass
+
 
 def main():
     parser = transformers.HfArgumentParser(
@@ -44,7 +46,9 @@ def main():
     model.config = model_config
     model.print_trainable_parameters()
 
-    dataset = datasets.load_dataset(trainer_args.dataset_path, split=trainer_args.split, name=trainer_args.subset)
+    dataset = datasets.load_dataset(
+        trainer_args.dataset_path, split=trainer_args.split, name=trainer_args.subset
+    )
 
     sae_dataset = CacheDataset(
         dataset=dataset,
