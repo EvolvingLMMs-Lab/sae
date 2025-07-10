@@ -99,3 +99,9 @@ We provide a simple training recipe to help you get started quickly. You're also
 
 <img width="2140" height="1830" alt="image" src="https://github.com/user-attachments/assets/2e092402-fcfb-4002-badb-55e135cd56b1" />
 
+
+## Future TODOs
+- [ ] Caching Sparse features to db
+- [ ] Steering Sae
+- [ ] Auto-Interp for Sae features
+- [ ] More Sae and More training Cases!
