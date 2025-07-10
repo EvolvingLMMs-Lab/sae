@@ -5,8 +5,9 @@ import os
 import torch
 from peft import PeftModel
 from peft.utils import SAFETENSORS_WEIGHTS_NAME, WEIGHTS_NAME, id_tensor_storage
-from sae.utils import get_peft_model_state_dict
 from safetensors.torch import save_file as safe_save_file
+
+from sae.utils import get_peft_model_state_dict
 
 
 class PeftSaeModel(PeftModel):

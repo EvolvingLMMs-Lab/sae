@@ -2,6 +2,7 @@ import unittest
 
 import torch
 import torch.nn as nn
+
 from sae import PeftSaeModel, TopKSaeConfig, get_peft_sae_model
 
 

@@ -3,14 +3,14 @@ import os
 import datasets
 import torch
 import transformers
+import wandb
+
 from sae import get_peft_sae_model
 from sae.launch.config import ModelArguments, SaeConfig, TrainingArguments
 from sae.trainer import SaeTrainer
 from sae.utils import hf_processor, hf_tokenizer
 from sae.utils.datasets import CacheDataset
 from sae.utils.factory import ModelFactory, SaeFactory
-
-import wandb
 
 try:
     if not os.environ.get("WANDB_API_KEY", None):
