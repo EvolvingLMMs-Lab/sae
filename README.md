@@ -1,4 +1,4 @@
-# SAE
+# Sparse Autoencoder Made Easy
 
 <img width="3804" height="3497" alt="sae" src="https://github.com/user-attachments/assets/a21d9499-37fd-44bc-a724-5cd7e5ea0d6b" />
 
