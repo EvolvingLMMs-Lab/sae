@@ -1,6 +1,7 @@
 # Sparse Autoencoder Made Easy
 
-<img width="3804" height="3497" alt="sae" src="https://github.com/user-attachments/assets/a21d9499-37fd-44bc-a724-5cd7e5ea0d6b" />
+<img width="3804" height="3497" alt="PixPin_2025-07-10_22-33-42" src="https://github.com/user-attachments/assets/59bf4ef7-e14c-4464-be3a-ba6fbf16ae48" />
+
 
 SAE is inspired by a wealth of Sparse Autoencoder (SAE) work from Anthropic, OpenAI, Google, and the open-source community. SAE has become a powerful and widely-used tool in the field of explainable AI. 
 
