@@ -101,6 +101,23 @@ We provide a simple training recipe to help you get started quickly. You're also
 <img width="2140" height="1830" alt="image" src="https://github.com/user-attachments/assets/2e092402-fcfb-4002-badb-55e135cd56b1" />
 
 
+## Related Work and Citation
+If you find this repository useful, please consider checking out our [previous paper](https://arxiv.org/pdf/2411.14982) on applying Sparse Autoencoders (SAE) to Large Multimodal Models, accepted at ICCV 2025.
+
+You can cite our work as follows:
+```shell
+@misc{zhang2024largemultimodalmodelsinterpret,
+      title={Large Multi-modal Models Can Interpret Features in Large Multi-modal Models},
+      author={Kaichen Zhang and Yifei Shen and Bo Li and Ziwei Liu},
+      year={2024},
+      eprint={2411.14982},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2411.14982},
+}
+```
+
+
 ## Future TODOs
 - [ ] Caching Sparse features to db
 - [ ] Steering Sae
